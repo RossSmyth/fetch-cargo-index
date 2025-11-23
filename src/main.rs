@@ -12,17 +12,21 @@ struct CrateJson {
 fn main() {
     let index = crates_index::GitIndex::with_path("../index", crates_index::git::URL).unwrap();
 
-    let mut registry = Vec::with_capacity(10000);
-    for crate_ in index.crates() {
-        if let Some(highest) = crate_.highest_normal_version() {
-            registry.push(CrateJson {
-                name: highest.name().to_string(),
-                version: highest.version().to_string(),
-                checksum: *highest.checksum(),
-                deps: highest.dependencies().iter().map(|dep| dep.crate_name().to_string()).collect()
-            });
-        }
-    }
+    let registry: Vec<CrateJson> = index
+        .crates()
+        .by_ref()
+        .filter_map(|c| c.highest_normal_version().cloned())
+        .map(|c| CrateJson {
+            name: c.name().to_string(),
+            version: c.version().to_string(),
+            checksum: *c.checksum(),
+            deps: c
+                .dependencies()
+                .iter()
+                .map(|dep| dep.crate_name().to_string())
+                .collect(),
+        })
+        .collect();
 
     let output = serde_json::to_string(registry.as_slice()).unwrap();
 
