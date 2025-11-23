@@ -275,6 +275,8 @@ name = "fetch-cargo-index"
 version = "0.1.0"
 dependencies = [
  "crates-index",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]
