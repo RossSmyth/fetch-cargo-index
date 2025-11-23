@@ -7,3 +7,7 @@ edition = "2024"
 crates-index = { version = "3.11.0", features = ["git-https", "git-performance"] }
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.145"
+
+[profile.release]
+lto = "thin"
+panic = "abort"
