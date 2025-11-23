@@ -4,6 +4,7 @@
   pkg-config,
   openssl,
   curl,
+  zlib-ng,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fetch-cargo-index";
@@ -18,5 +19,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     openssl
     curl
+    zlib-ng
   ];
 })
