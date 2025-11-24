@@ -1,3 +1,5 @@
+use rayon::iter::ParallelIterator;
+
 use crates_index;
 
 #[allow(dead_code)]
@@ -13,8 +15,8 @@ fn main() {
     let index = crates_index::GitIndex::with_path("../index", crates_index::git::URL).unwrap();
 
     let registry: Vec<CrateJson> = index
-        .crates()
-        .by_ref()
+        .crates_parallel()
+        .filter_map(|c| c.ok())
         .filter_map(|c| c.highest_normal_version().cloned())
         .map(|c| CrateJson {
             name: c.name().to_string(),
